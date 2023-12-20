@@ -1,0 +1,9 @@
+Notes for a later commit
+
+Date: 19/12/2023
+- Make the hanging effect only when the character is going down and to make it consistent add a hanging point to the hangable object
+- Refactor to states but keep the HangController separated for non hanging characters
+- Add a Drop mechanism
+- Add a move along mechanism
+- Debug and Trying to move along problems. The resulted suggestion is to migrate to a path system and keep the hangingEdgeDirection updated 
+ 

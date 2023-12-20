@@ -1,0 +1,115 @@
+﻿using UnityEngine;
+
+public class HangingState : IPlayerState
+{
+    private readonly PlayerController playerController;
+    private readonly Vector3 hangPosition;
+    private Vector3 hangingEdgeDirection;
+    private float moveSpeed;
+    
+    public float climbThreshold = 0.8f; // INCREASE this threshold to make it HARDER to move from hanging to climbing
+    public float dropThreshold = -0.8f; // DECREASE this threshold to make it HARDER to move from hanging to dropping
+    public HangingState(PlayerController playerController, Vector3 hangPosition, float moveSpeed)
+    {
+        this.playerController = playerController;
+        this.hangPosition = hangPosition;
+        this.hangingEdgeDirection = (hangPosition - playerController.transform.position).normalized;
+        this.moveSpeed = moveSpeed;
+    }
+
+    public void Enter()
+    {
+        var transform = playerController.transform;
+        var newPosition = transform.position;
+        newPosition.y = hangPosition.y;
+        transform.position = newPosition;
+        // playerController.transform.position = hangPosition;
+        
+        // Calculate direction from player to hanging edge
+        hangingEdgeDirection = (hangPosition - playerController.transform.position).normalized;
+
+        // Calculate rotation needed to face hanging edge
+        Quaternion desiredRotation = Quaternion.LookRotation(hangingEdgeDirection, Vector3.up);
+        
+        // Set character's rotation to face hanging edge
+        playerController.transform.rotation = desiredRotation;
+    }
+
+    public void SetMovingStatus(bool newStatus)
+    {
+    }
+
+    public float GetVerticalVelocity()
+    {
+        return 0;
+    }
+
+
+    public void StopMoving()
+    {
+        // movement.x = 0;
+        // movement.z = 0;
+        // Debug.Log("Stop Moving while Hanging.");
+    }
+
+    public void HandleUpdate()
+    {
+        // Hanging logic here
+    }
+
+    public void Exit()
+    {
+        // Any logic that needs to be carried out when exiting the hanging state goes here
+    }
+    public void Move(float horizontal, float vertical)
+    {
+        // Input with respect to camera's forward direction 
+        Vector3 inputDirection = CameraUtils.CalculateDirectionFromCamera(horizontal, vertical, Camera.main);
+        inputDirection.y = 0;
+        inputDirection.Normalize();
+        
+        // Get the direction vector along the hanging edge
+        Vector3 alongEdgeDirection = Vector3.Cross(hangingEdgeDirection, Vector3.up);
+        alongEdgeDirection.y = 0f; // Ensure the direction is perfectly horizontal
+        alongEdgeDirection.Normalize(); 
+        
+        // Calculate the dot product with along-edge direction
+        // float dotProduct = Vector3.Dot(hangingEdgeDirection, inputDirection);
+        // Calculate the dot products with hangingEdgeDirection and alongEdgeDirection 
+        float dotProductHanging = Vector3.Dot(inputDirection, hangingEdgeDirection);
+        float dotProductAlong = Vector3.Dot(inputDirection, alongEdgeDirection);
+        Vector3 crossProduct = Vector3.Cross(inputDirection, alongEdgeDirection);
+        
+        // float dotProduct = Vector3.Dot(hangingEdgeDirection, inputDirection);
+        if (dotProductHanging > climbThreshold)
+        {
+            Debug.Log("Climb");
+        }
+        else if (dotProductHanging < dropThreshold)
+        {
+            Debug.Log("Drop");
+            Drop();
+        }
+        else if (Mathf.Abs(dotProductHanging) <= climbThreshold) // Move along edge
+        {
+            // Vector3 alongEdgeDirection = Vector3.Cross(hangingEdgeDirection, Vector3.up); 
+            // Vector3 cross = Vector3.Cross(inputDirection, alongEdgeDirection);
+            if (dotProductAlong < 0)
+            {
+                Debug.Log("Moving to the left along the edge"); 
+                // Move the character to the left along the edge
+                playerController.transform.position -= alongEdgeDirection.normalized * moveSpeed * Time.deltaTime;
+            }
+            else if (dotProductAlong > 0)
+            {
+                Debug.Log("Moving to the right along the edge");
+                // Move the character to the right along the edge
+                playerController.transform.position += alongEdgeDirection.normalized * moveSpeed * Time.deltaTime;
+            }
+        }
+    }
+    private void Drop()
+    {
+        playerController.TransitionToState(new GroundedState(playerController));
+    }
+}

@@ -15,7 +15,7 @@ public class InputHandler : MonoBehaviour
           
         if (jump)
         {
-            playerController.Jump();
+            playerController.JumpRequested();
         }
           
         if(horizontal != 0 || vertical != 0)
@@ -26,6 +26,7 @@ public class InputHandler : MonoBehaviour
         else if (wasMoving) 
         {
             playerController.StopMoving();
+            Debug.Log("Stop moving");
             wasMoving = false;
         }
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
