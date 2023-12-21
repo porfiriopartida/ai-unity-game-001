@@ -1,0 +1,6 @@
+Notes for a later commit
+
+Date: 20/12/2023
+- Refactor the move method to calculate a new alongEdgeDirection using the normal instead
+
+ 

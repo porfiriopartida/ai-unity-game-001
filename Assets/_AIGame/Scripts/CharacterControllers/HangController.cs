@@ -43,7 +43,8 @@ public class HangController : MonoBehaviour
                     // Check if player is close enough to hanging position. 
                     if (Mathf.Abs(hangPoint.transform.position.y - hit.transform.position.y) <= hangThreshold)
                     {
-                        playerController.TransitionToState(new HangingState(playerController, hit.point, moveSpeed));
+                        // Vector3 hangColliderNormal = hit.normal;
+                        playerController.TransitionToState(new HangingState(playerController, hit.point, moveSpeed, hit));
                     }
                 }
             }
