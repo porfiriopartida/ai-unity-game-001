@@ -12,7 +12,7 @@ public class CombatController : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, enemyLayer);
         foreach (var hit in hits)
         {
-            hit.GetComponent<HealthController>()?.TakeDamage(attackDamage);
+            hit.GetComponent<HealthComponent>()?.TakeDamage(attackDamage);
         }
     }
 

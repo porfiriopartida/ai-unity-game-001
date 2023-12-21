@@ -10,6 +10,7 @@ public class HangController : MonoBehaviour
 
     private HangableObject currentHangableObject;
     public float moveSpeed = 2.0f;
+    private HangableObject lastLedge;
 
     void Start()
     {
@@ -22,7 +23,12 @@ public class HangController : MonoBehaviour
 
     void Update()
     {
-        if (!(playerController.CurrentState is GroundedState))
+        if (playerController.isGrounded() || playerController.GetVerticalVelocity() > 0)
+        {
+            lastLedge = null;
+        }
+
+        if (!(playerController.CurrentState is GroundedState) || playerController.isGrounded() || playerController.GetVerticalVelocity() > 0)
         {
             return;
         }
@@ -31,6 +37,7 @@ public class HangController : MonoBehaviour
 
     private void CheckForHangableObject()
     {
+        // Debug.Log("Checking for Hangable objects.");
         RaycastHit hit;
         if (Physics.Raycast(hangPoint.position, hangPoint.forward, out hit, raycastDistance, hangableObjectLayer))
         {
@@ -41,10 +48,9 @@ public class HangController : MonoBehaviour
                 if (hangableObject != null)
                 {
                     // Check if player is close enough to hanging position. 
-                    if (Mathf.Abs(hangPoint.transform.position.y - hit.transform.position.y) <= hangThreshold)
+                    if (Mathf.Abs(hangPoint.transform.position.y - hangableObject.hangingPoint.position.y) <= hangThreshold)
                     {
-                        // Vector3 hangColliderNormal = hit.normal;
-                        playerController.TransitionToState(new HangingState(playerController, hit.point, moveSpeed, hit));
+                        TryToHang(hangableObject, hit);
                     }
                 }
             }
@@ -61,5 +67,14 @@ public class HangController : MonoBehaviour
     {
         Gizmos.color = Color.white;
         Gizmos.DrawRay(hangPoint.position, hangPoint.transform.forward * raycastDistance);
+    }
+    public void TryToHang(HangableObject hangableObject, RaycastHit hit)
+    {
+        if (hangableObject != lastLedge)
+        {
+            // Create and transition to new HangingState
+            playerController.TransitionToState(new HangingState(playerController, hit.point, moveSpeed, hit));
+            this.lastLedge = hangableObject;
+        }
     }
 }

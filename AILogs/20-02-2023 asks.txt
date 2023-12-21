@@ -1,6 +1,8 @@
 Notes for a later commit
 
 Date: 20/12/2023
+Improved movement logic in HangingState for player control
+
 - Refactor the move method to calculate a new alongEdgeDirection using the normal instead
 
- 
+- Create a new component to create a shake for hit interactions to HealthComponent holders, use the observer pattern for this task.

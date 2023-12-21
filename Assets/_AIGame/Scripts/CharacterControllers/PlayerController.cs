@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     private void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 300, 20), $"Player Y position: {transform.position.y}");
-        // GUI.Label(new Rect(10, 30, 300, 20), $"Ground Object: {groundObjectName}");
+        GUI.Label(new Rect(10, 30, 300, 20), $"controller.isGrounded: {controller.isGrounded}");
         // GUI.Label(new Rect(10, 50, 300, 20), $"Current Speed: {currentSpeed}");
     }
 
@@ -89,5 +89,10 @@ public class PlayerController : MonoBehaviour
         {
             runnableState.Run(isRunning);
         }
+    }
+
+    public bool isGrounded()
+    {
+        return controller.isGrounded;
     }
 }

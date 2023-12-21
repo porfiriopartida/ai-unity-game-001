@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-public class HealthController : MonoBehaviour
+public class HealthComponent : MonoBehaviour
 {
+    public delegate void HealthDelegate();
+    public event HealthDelegate OnTakeDamageObservers;
+    
     public int maxHealth = 100;
     private int currentHealth;
 
@@ -15,9 +18,15 @@ public class HealthController : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         
+        
         if (currentHealth <= 0)
         {
             Die();
+        }
+        else
+        {
+            // Notify observers:
+            OnTakeDamageObservers?.Invoke();
         }
     }
 

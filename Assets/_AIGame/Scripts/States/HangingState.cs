@@ -11,7 +11,8 @@ public class HangingState : IPlayerState
     
     private RaycastHit hit;
 
-    public HangingState(PlayerController playerController, Vector3 hangPosition, float moveSpeed,
+    public HangingState(PlayerController playerController, Vector3 hangPosition,
+        float moveSpeed,
         RaycastHit hit)
     {
         moveAlongEdgeThreshold = 2*(1 - climbThreshold);

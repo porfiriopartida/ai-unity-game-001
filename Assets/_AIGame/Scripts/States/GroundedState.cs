@@ -7,7 +7,7 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
     public float jumpHeight = 2.0f;
     public float checkDistance = 0.2f;
     public bool canDoubleJump = true;
-    public float jumpBufferTime = 0.2f;
+    public float jumpBufferTime = 0f;
     private Camera mainCamera;
     private bool isGrounded;
     private string groundObjectName = "N/A";
@@ -110,14 +110,15 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
 
     public void Jump()
     {
-        if (playerController.controller.isGrounded || (!playerController.controller.isGrounded && canDoubleJump && jumpCount < 2))
-        {
+        // if (playerController.controller.isGrounded || (!playerController.controller.isGrounded && canDoubleJump && jumpCount < 2))
+        // {
+            Debug.Log("Jumping");
             jumpPressed = true;
             jumpPressedTime = Time.time;
             lastJumpPressedTime = Time.time;
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
             jumpCount++;
-        }
+        // }
     }
 
     public void Run(bool isRunning)
