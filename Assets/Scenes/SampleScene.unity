@@ -898,6 +898,7 @@ GameObject:
   - component: {fileID: 1580557700}
   - component: {fileID: 1580557703}
   - component: {fileID: 1580557704}
+  - component: {fileID: 1580557705}
   m_Layer: 7
   m_Name: Sphere
   m_TagString: Untagged
@@ -914,7 +915,7 @@ Transform:
   m_GameObject: {fileID: 1580557698}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.7927446, y: 0.032597303, z: 0.27116823}
+  m_LocalPosition: {x: -0.64, y: 0.032597303, z: 12.26}
   m_LocalScale: {x: 1.9016, y: 1.9016, z: 1.9016}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1018,6 +1019,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shakeDuration: 0.5
   shakeMagnitude: 0.1
+  restoreSpeed: 1
+--- !u!114 &1580557705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580557698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bf20bb53a1c4b61a4418ef8d41300bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  roamAreaRadius: 10
+  target: {fileID: 0}
+  roamPosition: {x: 13.49, y: 0, z: 12.26}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  chaseRadius: 7
+  attackRadius: 3
 --- !u!1 &1761476110
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,6 +1161,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1365605483078202757, guid: 27c9ae09936374144aa8e1e3b5a49606,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1458734303344301991, guid: 27c9ae09936374144aa8e1e3b5a49606,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2256716352723303570, guid: 27c9ae09936374144aa8e1e3b5a49606,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -1152,6 +1185,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328754163602161849, guid: 27c9ae09936374144aa8e1e3b5a49606,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7941626680333799084, guid: 27c9ae09936374144aa8e1e3b5a49606,
         type: 3}

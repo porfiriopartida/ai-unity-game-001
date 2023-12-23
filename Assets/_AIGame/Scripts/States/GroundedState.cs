@@ -83,6 +83,8 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
             return;
         }
 
+        // Debug.Log($"{horizontal} - {vertical}");
+
         Vector3 direction = CameraUtils.CalculateDirectionFromCamera(horizontal, vertical, Camera.main);
         // Vector3 moveHorizontalDirection = mainCamera.transform.right * horizontal;
         // Vector3 moveVerticalDirection = mainCamera.transform.forward * vertical;
