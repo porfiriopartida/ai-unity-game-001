@@ -74,7 +74,10 @@ public partial class BasicAI : MonoBehaviour
     private void Chase() 
     {
         // Chasing the target
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        var newPosition = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        newPosition.y = transform.position.y;
+        transform.position = newPosition;
+
     }
 
     void FindNewRoamPosition()
