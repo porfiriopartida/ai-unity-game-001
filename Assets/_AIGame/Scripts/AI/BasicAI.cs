@@ -26,7 +26,7 @@ public partial class BasicAI : MonoBehaviour
         set 
         {
             _currentState = value; 
-            Debug.Log("currentState has been updated to: " + _currentState);
+            // Debug.Log("currentState has been updated to: " + _currentState);
         }
     }
 

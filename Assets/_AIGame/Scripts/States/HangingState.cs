@@ -12,15 +12,23 @@ public class HangingState : IPlayerState
     private RaycastHit hit;
 
     public HangingState(PlayerController playerController, Vector3 hangPosition,
-        float moveSpeed,
         RaycastHit hit)
     {
         moveAlongEdgeThreshold = 2*(1 - climbThreshold);
         this.playerController = playerController;
         this.hangPosition = hangPosition;
-        this.moveSpeed = moveSpeed;
+        // this.moveSpeed = moveSpeed;
         this.hit = hit;
+        SetupMotionParameters();
+        this.playerController.verticalVelocity = 0;
     }
+
+
+    public void SetupMotionParameters()
+    {
+        moveSpeed = playerController.motionParameters.hangingMoveSpeed;
+    }
+    
     public void Enter()
     {
         var transform = playerController.transform;
@@ -117,6 +125,10 @@ public class HangingState : IPlayerState
     }
     private void Drop()
     {
-        playerController.TransitionToState(new GroundedState(playerController));
+        playerController.TransitionToState(new AirState(playerController));
+    }
+    public override string ToString()
+    {
+        return "HangingState[]";
     }
 }

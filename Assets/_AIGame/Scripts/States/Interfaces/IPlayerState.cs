@@ -2,6 +2,8 @@
 
 public interface IPlayerState
 {
+    void SetupMotionParameters();
+
     void Enter();
     void HandleUpdate();
     void Exit();

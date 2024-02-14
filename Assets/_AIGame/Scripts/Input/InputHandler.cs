@@ -26,7 +26,7 @@ public class InputHandler : MonoBehaviour
         else if (wasMoving) 
         {
             playerController.StopMoving();
-            Debug.Log("Stop moving");
+            // Debug.Log("Stop moving");
             wasMoving = false;
         }
         bool isRunning = Input.GetKey(KeyCode.LeftShift);

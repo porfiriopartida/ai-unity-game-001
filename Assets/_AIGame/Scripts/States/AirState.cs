@@ -1,20 +1,13 @@
 ﻿using _AIGame.Scripts.States;
 using UnityEngine;
 
-public class GroundedState : IPlayerState, IJumpableState, IRunnableState
+public class AirState : IPlayerState, IRunnableState
 {
-    #region MotionParameters
-
     public float speed = 5.0f;
     public float jumpHeight = 2.0f;
-    public float jumpBufferTime = 0f;
-    public float runSpeed = 10.0f;
-    public float acceleration = 2.0f;
-
-    #endregion
-
     public float checkDistance = 0.2f;
     public bool canDoubleJump = true;
+    public float jumpBufferTime = 0f;
     private Camera mainCamera;
     private bool isGrounded;
     private string groundObjectName = "N/A";
@@ -22,17 +15,17 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
     private bool jumpPressed;
     private float lastJumpPressedTime = -1f;
     private Vector3 movement;
-    // private float playerController.verticalVelocity;
     private float jumpPressedTime = 0f;
-    private float maxFallingSpeed = -2.0f;
+    public float runSpeed = 10.0f;
+    public float acceleration = 2.0f;
+
     private float currentSpeed;
-    
     
     public bool canMove = true;
     private Vector3 direction = Vector3.zero; 
     private readonly PlayerController playerController;
     
-    public GroundedState(PlayerController playerController)
+    public AirState(PlayerController playerController)
     {
         this.playerController = playerController;
         mainCamera = Camera.main;
@@ -64,32 +57,20 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
         bool wasGrounded = isGrounded;
         isGrounded = Physics.Raycast(playerController.groundCheck.position, Vector3.down, out hit, checkDistance, playerController.groundLayer);
         
-        if (isGrounded && playerController.verticalVelocity <= 0)
+        if (isGrounded && playerController.verticalVelocity <= 0 || playerController.isGrounded())
         {
-            playerController.verticalVelocity = maxFallingSpeed; // Small value to keep player grounded
-        }
-        else if (!wasGrounded && isGrounded && playerController.verticalVelocity > 0)
-        {
-            // Buffer jump
-            if (Time.time - jumpPressedTime <= jumpBufferTime)
-            {
-                jumpCount = 0;
-                Jump();
-            }
+            playerController.verticalVelocity = -2.0f; // Small value to keep player grounded
+            playerController.TransitionToState(new GroundedState(playerController));
         }
         else if (!isGrounded)
         {
             playerController.verticalVelocity += Physics.gravity.y * Time.deltaTime;
-            if (!playerController.isGrounded())
+            if (playerController.verticalVelocity < playerController.motionParameters.maxFallingSpeed)
             {
-                playerController.TransitionToState(new AirState(playerController));
+                //TODO: Update configurable capped falling speed.
+                playerController.verticalVelocity = playerController.motionParameters.maxFallingSpeed;
             }
-        }
-        
-        if (jumpPressed && (isGrounded || (!isGrounded && canDoubleJump && jumpCount < 2)))
-        {
-            Jump();
-            jumpPressed = false;
+            
         }
         // Moving the player
         movement.y = playerController.verticalVelocity;
@@ -130,18 +111,6 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
         //jumpPressed = false;  // Reset for next input check
     }
 
-    public void Jump()
-    {
-        // if (playerController.controller.isGrounded || (!playerController.controller.isGrounded && canDoubleJump && jumpCount < 2))
-        // {
-            Debug.Log("Jumping");
-            jumpPressed = true;
-            jumpPressedTime = Time.time;
-            lastJumpPressedTime = Time.time;
-            playerController.verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
-            jumpCount++;
-        // }
-    }
 
     public void Run(bool isRunning)
     {
@@ -151,6 +120,7 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
     {
         canMove = status;
     }
+
 
     public float GetVerticalVelocity()
     {
@@ -166,6 +136,6 @@ public class GroundedState : IPlayerState, IJumpableState, IRunnableState
     public void Exit() { }
     public override string ToString()
     {
-        return "GroundedState[]";
+        return "AirState[]";
     }
 }

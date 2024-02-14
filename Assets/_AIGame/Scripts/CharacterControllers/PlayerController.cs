@@ -1,4 +1,5 @@
 using _AIGame.Scripts.States;
+using Scripts.States.Parameters;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -8,24 +9,30 @@ public class PlayerController : MonoBehaviour
         public Transform groundCheck;
         public CharacterController controller;
         public LayerMask groundLayer;
-        
-        
+        public MotionParameters motionParameters;
+        public float verticalVelocity;
+
         private void Start()
         {
             TransitionToState(new GroundedState(this));
+            if (motionParameters == null)
+            {
+                motionParameters = GetComponent<MotionParameters>();
+            }
         }
-
 
         // private bool isGrounded()
         // {
         //     return controller.isGrounded || _isGrounded;
         // }
+        
         void Update()
         {
             CurrentState.HandleUpdate();
         }
         public void TransitionToState(IPlayerState newState)
         {
+            Debug.Log($"New State {newState}");
             // Call Exit on the previous state before transitioning to new state
             CurrentState?.Exit();
 
@@ -37,8 +44,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnGUI()
     {
+        GUI.color = Color.blue;
+        GUI.backgroundColor = Color.gray;
         GUI.Label(new Rect(10, 10, 300, 20), $"Player Y position: {transform.position.y}");
         GUI.Label(new Rect(10, 30, 300, 20), $"controller.isGrounded: {controller.isGrounded}");
+        GUI.Label(new Rect(10, 50, 300, 20), $"State: {CurrentState.ToString()}");
+        GUI.Label(new Rect(10, 70, 300, 20), $"Player Y Speed: {verticalVelocity}");
         // GUI.Label(new Rect(10, 50, 300, 20), $"Current Speed: {currentSpeed}");
     }
 

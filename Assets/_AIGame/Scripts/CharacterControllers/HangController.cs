@@ -9,7 +9,6 @@ public class HangController : MonoBehaviour
     public Transform hangPoint;
 
     private HangableObject currentHangableObject;
-    public float moveSpeed = 2.0f;
     private HangableObject lastLedge;
 
     void Start()
@@ -28,7 +27,7 @@ public class HangController : MonoBehaviour
             lastLedge = null;
         }
 
-        if (!(playerController.CurrentState is GroundedState) || playerController.isGrounded() || playerController.GetVerticalVelocity() > 0)
+        if (!(playerController.CurrentState is AirState) || playerController.isGrounded() || playerController.GetVerticalVelocity() > 0)
         {
             return;
         }
@@ -58,8 +57,8 @@ public class HangController : MonoBehaviour
         else if (playerController.CurrentState is HangingState)
         {
             // If there's no hangable object in front of the player and the player is in the hanging state.
-            // Then transition the player state back to GroundedState or any other appropriate state.
-            playerController.TransitionToState(new GroundedState(playerController));
+            // Then transition the player state back to AirState or any other appropriate state.
+            playerController.TransitionToState(new AirState(playerController));
         }
     }
     // Drawing Gizmos for ground check
@@ -70,10 +69,11 @@ public class HangController : MonoBehaviour
     }
     public void TryToHang(HangableObject hangableObject, RaycastHit hit)
     {
+        Debug.Log("Trying to Hang.");
         if (hangableObject != lastLedge)
         {
             // Create and transition to new HangingState
-            playerController.TransitionToState(new HangingState(playerController, hit.point, moveSpeed, hit));
+            playerController.TransitionToState(new HangingState(playerController, hit.point, hit));
             this.lastLedge = hangableObject;
         }
     }
